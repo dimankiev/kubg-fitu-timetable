@@ -7,6 +7,6 @@ class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
         url = get_timetable_url()
-        self.send_header('Location', urllib.parse.quote(url))
+        self.send_header('Location', urllib.parse.quote(url, safe=':'))
         self.end_headers()
         return
