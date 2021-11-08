@@ -1,5 +1,5 @@
 from http.server import BaseHTTPRequestHandler
-from _getter import get_timetable_url
+from ._getter import get_timetable_url
 
 class handler(BaseHTTPRequestHandler):
 
