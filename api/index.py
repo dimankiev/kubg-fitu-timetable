@@ -1,6 +1,6 @@
 from http.server import BaseHTTPRequestHandler
 from ._getter import get_timetable_url, Courses, Fields
-import urllib.parse
+from urllib import parse
 
 class handler(BaseHTTPRequestHandler):
 
@@ -12,7 +12,7 @@ class handler(BaseHTTPRequestHandler):
         try:
             url = get_timetable_url(Fields[field].value, Courses[course].value)
             self.send_response(302)
-            self.send_header('Location', urllib.parse.quote(url, safe=':/'))
+            self.send_header('Location', parse.quote(url, safe=':/'))
             self.end_headers()
         except:
             self.send_response(404)
