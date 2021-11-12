@@ -22,7 +22,26 @@ def rec_lists_filter(lists, text):
         else:
             continue
 
-def get_timetable_url():
+class Fields(Enum):
+    Infosec = 'Кібербезпека'
+    Science = 'Комп`ютерні науки'
+    Mathems = 'Математика'
+    Finance = 'Фінанси і кредит'
+    Mangmnt = 'Менеджмент'
+    Economs = 'Економіка'
+    
+class Courses(Enum):
+    First = '1 курс'
+    Second = '2 курс'
+    Third = '3 курс'
+    Fourth = '4 курс'
+    FirstAndSecond = '1-2 курс'
+    ThirdAndFourth = '3-4 курс'
+    MasterFirst = '1 (магістерський) курс'
+    MasterSecond = '2 (магістерський) курс'
+    MasterFirstAndSecond = '1-2 (магістерський) курс'
+
+def get_timetable_url(field: Fields, course: Courses):
     linkto_main_page = 'https://fitu.kubg.edu.ua'
 
     page = requests.get(linkto_main_page)
@@ -38,16 +57,13 @@ def get_timetable_url():
 
     all_lists = code.xpath('//div[@class="accordion-inner panel-body"]')
 
-    discipline = 'Кібербезпека'
-    filtered = rec_lists_filter(all_lists[::-1], discipline)
-
-    course = '3'
+    filtered = rec_lists_filter(all_lists[::-1], field)
 
     timetable_url = 'not found'
 
     for link in filtered.xpath('./p/a'):
         text = link.xpath('./span/text()')[0].strip()
-        if ('%s курс' % course) in text:
+        if ('%s' % course) in text:
             timetable_url = link.get('href')
             break
 

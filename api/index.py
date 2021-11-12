@@ -5,7 +5,22 @@ import urllib.parse
 class handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
-        url = get_timetable_url()
-        self.send_response(302)
-        self.send_header('Location', urllib.parse.quote(url, safe=':/'))
-        self.end_headers()
+        s = self.path
+        dic = dict(parse.parse_qsl(parse.urlsplit(s).query))
+        field = dic.get('field')
+        course = dic.get('course')
+        try:
+            url = get_timetable_url(field, course)
+            self.send_response(302)
+            self.send_header('Location', urllib.parse.quote(url, safe=':/'))
+            self.end_headers()
+        except:
+            self.send_response(404)
+            self.send_header('Content-type','text/plain')
+            self.end_headers()
+            if "field" in dic and "course" in dic:
+                message = "No info found for " + dic["field"] + " and " + dic["course"] + "!"
+            else:
+                message = "No info found!"
+            self.wfile.write(message.encode())
+            return
