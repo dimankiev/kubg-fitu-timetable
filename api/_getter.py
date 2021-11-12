@@ -1,4 +1,5 @@
 from lxml import html
+from enum import Enum
 import requests
 
 def rec_link_look(links, text):
@@ -41,7 +42,7 @@ class Courses(Enum):
     MasterSecond = '2 (магістерський) курс'
     MasterFirstAndSecond = '1-2 (магістерський) курс'
 
-def get_timetable_url(field: Fields, course: Courses):
+def get_timetable_url(field: str, course: str):
     linkto_main_page = 'https://fitu.kubg.edu.ua'
 
     page = requests.get(linkto_main_page)
@@ -60,7 +61,7 @@ def get_timetable_url(field: Fields, course: Courses):
     filtered = rec_lists_filter(all_lists[::-1], field)
 
     timetable_url = 'not found'
-
+    
     for link in filtered.xpath('./p/a'):
         text = link.xpath('./span/text()')[0].strip()
         if ('%s' % course) in text:
